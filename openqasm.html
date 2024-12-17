@@ -1,0 +1,334 @@
+<html><head><base href="https://retrocomp.mem/GraASSEMBLY/Open_QASM/">
+<title>GraASSEMBLY for OpenQASM - Advanced Quantum Visualization</title>
+<style>
+  body {
+    font-family: 'Fira Code', monospace;
+    background-color: #000;
+    color: #00ff00;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap');
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    border: 2px solid #00ff00;
+    padding: 20px;
+    box-shadow: 0 0 20px #00ff00;
+    background-color: rgba(0, 17, 0, 0.9);
+  }
+  h1, h2 {
+    text-align: center;
+    text-shadow: 0 0 10px #00ff00;
+  }
+  .logo {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    margin: 20px auto;
+  }
+  .demo {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .code-editor {
+    flex: 1;
+    background-color: #000800;
+    border: 1px solid #00ff00;
+    padding: 10px;
+    height: 600px;
+    overflow: auto;
+    font-size: 14px;
+  }
+  .visualization {
+    flex: 1;
+    margin-left: 20px;
+    position: relative;
+  }
+  #qsphere, #qcircuit {
+    border: 1px solid #00ff00;
+    background-color: #000800;
+  }
+  #controls {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  button {
+    background-color: #004400;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  button:hover {
+    background-color: #006600;
+  }
+  #output {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #000800;
+    border: 1px solid #00ff00;
+    height: 100px;
+    overflow: auto;
+  }
+  .glow {
+    animation: glow 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    from { text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00; }
+    to { text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="glow">Advanced GraASSEMBLY for OpenQASM</h1>
+    <svg class="logo" viewBox="0 0 500 200">
+      <defs>
+        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#00ff00;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#00aa00;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect width="500" height="200" fill="url(#grad)" fill-opacity="0.1"/>
+      <text x="20" y="60" font-family="'Fira Code', monospace" font-size="40" fill="#00ff00">GraASSEMBLY</text>
+      <text x="120" y="110" font-family="'Fira Code', monospace" font-size="30" fill="#00ff00">FOR</text>
+      <text x="60" y="160" font-family="'Fira Code', monospace" font-size="50" fill="#00ff00">OpenQASM</text>
+      <g transform="translate(380, 70) scale(0.8)">
+        <path d="M0,0 h60 v60 h-60 z M10,10 h40 v40 h-40 z" fill="none" stroke="#00ff00" stroke-width="4"/>
+        <circle cx="30" cy="30" r="10" fill="#00ff00">
+          <animate attributeName="r" values="10;15;10" dur="2s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+    </svg>
+    <p>Welcome to the advanced GraASSEMBLY for OpenQASM exhibit. This cutting-edge simulation demonstrates the power of quantum computing in graphics and visualization, pushing the boundaries of what's possible with OpenQASM.</p>
+    <div class="demo">
+      <div class="code-editor" id="editor">
+// Advanced OpenQASM 3.0 Code
+OPENQASM 3.0;
+include "stdgates.inc";
+
+// Define quantum registers
+qubit[5] q;
+bit[5] c;
+
+// Custom gates for quantum graphics
+gate hadamard_diffusion q {
+  h q;
+  z q;
+  h q;
+}
+
+gate quantum_fourier_transform q {
+  for i in [0: len(q) - 1] {
+    h q[i];
+    for j in [i + 1 : len(q) - 1] {
+      ctrl @ phase(pi / 2^(j - i)) q[j], q[i];
+    }
+  }
+}
+
+// Quantum Mandelbrot Set Generator
+def mandelbrot(qubit[3] coord, qubit[2] iter) -> bit {
+  reset coord;
+  reset iter;
+  
+  // Encode coordinates
+  rx(pi * coord[0] / 2) coord[0];
+  ry(pi * coord[1] / 2) coord[1];
+  
+  // Iterate function
+  for i in [1: 4] {
+    // z = z^2 + c
+    ctrl @ (rx(pi/2), ry(pi/2)) coord[0:1], coord[2];
+    cx coord[2], coord[0:1];
+    
+    // Check if |z| > 2
+    measure coord[2] -> c[0];
+    if (c[0] == 1) break;
+  }
+  
+  return c[0];
+}
+
+// Main quantum circuit
+def main() {
+  for x in [0: 31] {
+    for y in [0: 31] {
+      let in_set = mandelbrot(q[0:3], q[3:5]);
+      if (in_set == 0) {
+        // Apply quantum coloring algorithm
+        hadamard_diffusion q[0:3];
+        quantum_fourier_transform q[0:3];
+      }
+      // Measure and store result
+      measure q[0:3] -> c[0:3];
+    }
+  }
+}
+
+// Run the main function
+main();
+      </div>
+      <div class="visualization">
+        <canvas id="qsphere" width="400" height="300"></canvas>
+        <canvas id="qcircuit" width="400" height="200"></canvas>
+        <div id="controls">
+          <button id="run">Run Simulation</button>
+          <button id="reset">Reset</button>
+        </div>
+        <div id="output"></div>
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+  let renderer, scene, camera, sphere, pointCloud;
+  let circuit, qubits = [], gates = [];
+
+  function initQSphere() {
+    const canvas = document.getElementById('qsphere');
+    renderer = new THREE.WebGLRenderer({canvas, alpha: true});
+    renderer.setSize(400, 300);
+
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, 400/300, 0.1, 1000);
+    camera.position.z = 2;
+
+    const geometry = new THREE.SphereGeometry(1, 32, 32);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x00ff00,
+      wireframe: true
+    });
+    sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+
+    const points = [];
+    for (let i = 0; i < 1000; i++) {
+      const vector = new THREE.Vector3();
+      vector.setFromSpherical(new THREE.Spherical(
+        1,
+        Math.random() * Math.PI,
+        Math.random() * 2 * Math.PI
+      ));
+      points.push(vector);
+    }
+
+    const pointGeometry = new THREE.BufferGeometry().setFromPoints(points);
+    const pointMaterial = new THREE.PointsMaterial({color: 0x00ff00, size: 0.02});
+    pointCloud = new THREE.Points(pointGeometry, pointMaterial);
+    scene.add(pointCloud);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      sphere.rotation.x += 0.005;
+      sphere.rotation.y += 0.005;
+      pointCloud.rotation.x += 0.002;
+      pointCloud.rotation.y += 0.002;
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  }
+
+  function initQCircuit() {
+    const canvas = document.getElementById('qcircuit');
+    circuit = canvas.getContext('2d');
+    circuit.strokeStyle = '#00ff00';
+    circuit.fillStyle = '#00ff00';
+    circuit.lineWidth = 2;
+
+    qubits = [50, 100, 150];
+    gates = [
+      {type: 'H', qubit: 0, x: 100},
+      {type: 'CNOT', control: 0, target: 1, x: 200},
+      {type: 'RX', qubit: 2, x: 300}
+    ];
+
+    drawCircuit();
+  }
+
+  function drawCircuit() {
+    circuit.clearRect(0, 0, 400, 200);
+    
+    // Draw qubit lines
+    qubits.forEach(y => {
+      circuit.beginPath();
+      circuit.moveTo(50, y);
+      circuit.lineTo(350, y);
+      circuit.stroke();
+    });
+
+    // Draw gates
+    gates.forEach(gate => {
+      if (gate.type === 'H') {
+        circuit.strokeRect(gate.x - 15, qubits[gate.qubit] - 15, 30, 30);
+        circuit.fillText('H', gate.x - 5, qubits[gate.qubit] + 5);
+      } else if (gate.type === 'CNOT') {
+        circuit.beginPath();
+        circuit.arc(gate.x, qubits[gate.control], 5, 0, 2 * Math.PI);
+        circuit.fill();
+        circuit.beginPath();
+        circuit.moveTo(gate.x, qubits[gate.control]);
+        circuit.lineTo(gate.x, qubits[gate.target]);
+        circuit.stroke();
+        circuit.beginPath();
+        circuit.arc(gate.x, qubits[gate.target], 10, 0, 2 * Math.PI);
+        circuit.stroke();
+      } else if (gate.type === 'RX') {
+        circuit.strokeRect(gate.x - 15, qubits[gate.qubit] - 15, 30, 30);
+        circuit.fillText('Rx', gate.x - 10, qubits[gate.qubit] + 5);
+      }
+    });
+  }
+
+  function runSimulation() {
+    const output = document.getElementById('output');
+    output.innerHTML = 'Running quantum simulation...';
+
+    // Simulate quantum operations
+    setTimeout(() => {
+      const result = math.complex(Math.random(), Math.random());
+      output.innerHTML += `<br>Result: |ψ⟩ = ${result.toString(2)}`;
+
+      // Update visualization
+      sphere.material.color.setHSL(Math.random(), 1, 0.5);
+      pointCloud.material.color.setHSL(Math.random(), 1, 0.5);
+
+      gates.push({type: 'H', qubit: Math.floor(Math.random() * 3), x: 350});
+      drawCircuit();
+    }, 2000);
+  }
+
+  function resetSimulation() {
+    const output = document.getElementById('output');
+    output.innerHTML = 'Simulation reset.';
+
+    sphere.material.color.setHex(0x00ff00);
+    pointCloud.material.color.setHex(0x00ff00);
+
+    gates = [
+      {type: 'H', qubit: 0, x: 100},
+      {type: 'CNOT', control: 0, target: 1, x: 200},
+      {type: 'RX', qubit: 2, x: 300}
+    ];
+    drawCircuit();
+  }
+
+  initQSphere();
+  initQCircuit();
+
+  document.getElementById('run').addEventListener('click', runSimulation);
+  document.getElementById('reset').addEventListener('click', resetSimulation);
+});
+</script>
+</body></html>
